@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindAnchor — AI Workflow Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f5f2eb;
+    --gold: #c9a84c;
+    --gold-light: #e8d08a;
+    --smoke: #e8e4da;
+    --mid: #7a7468;
+    --accent: #1a3a2a;
+    --accent-light: #2d5c42;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.4rem 3rem;
+    background: rgba(245, 242, 235, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.6rem 1.4rem;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .nav-cta:hover { background: var(--gold); color: var(--ink); }
+
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10rem 4rem 6rem 5rem;
+    position: relative;
+  }
+
+  .hero-left::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 10%; bottom: 10%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 5vw, 5rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title em { font-style: italic; color: var(--gold); }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--mid);
+    max-width: 440px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.9rem 2rem;
+    text-decoration: none;
+    transition: all 0.25s;
+    border: 1px solid var(--ink);
+  }
+
+  .btn-primary:hover { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+
+  .btn-ghost {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    border-bottom: 1px solid var(--mid);
+    padding-bottom: 0.1rem;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .btn-ghost:hover { color: var(--ink); border-color: var(--ink); }
+
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10rem 5rem 6rem 4rem;
+    position: relative;
+  }
+
+  .hero-diagram { width: 100%; max-width: 380px; opacity: 0; animation: fadeIn 1.2s 1s forwards; }
+
+  .diagram-box {
+    border: 1px solid;
+    padding: 1.4rem 1.8rem;
+    margin-bottom: -1px;
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  .diagram-box:hover { background: rgba(201,168,76,0.05); }
+  .diagram-box-gold { border-color: var(--gold); }
+  .diagram-box-ink { border-color: rgba(10,10,15,0.2); }
+
+  .diagram-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+
+  .diagram-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; color: var(--ink); }
+  .diagram-desc { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--mid); margin-top: 0.3rem; line-height: 1.5; }
+  .diagram-connector { width: 1px; height: 20px; background: var(--gold); margin: 0 auto; }
+
+  section { padding: 7rem 5rem; position: relative; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  #product { background: var(--ink); color: var(--paper); }
+  #product .section-title { color: var(--paper); }
+  #product .section-label { color: var(--gold-light); }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    margin-top: 4rem;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .product-card {
+    padding: 2.5rem;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  .product-card:last-child { border-right: none; }
+  .product-card:hover { background: rgba(201,168,76,0.05); }
+
+  .product-card-num { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--gold); letter-spacing: 0.15em; margin-bottom: 1.5rem; }
+  .product-card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--paper); margin-bottom: 1rem; line-height: 1.3; }
+  .product-card-body { font-size: 0.95rem; color: rgba(245,242,235,0.6); line-height: 1.6; }
+
+  #pricing { background: var(--smoke); }
+
+  .pricing-container { max-width: 860px; margin: 4rem auto 0; }
+
+  .pricing-card {
+    border: 1px solid var(--gold);
+    padding: 3.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    position: relative;
+    background: var(--paper);
+  }
+
+  .pricing-card::before {
+    content: 'FULL BUNDLE';
+    position: absolute;
+    top: -0.7rem; left: 3rem;
+    background: var(--gold);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    padding: 0.2rem 0.8rem;
+  }
+
+  .pricing-amount { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 4.5rem; line-height: 1; letter-spacing: -0.03em; color: var(--ink); }
+  .pricing-amount span { font-size: 1.5rem; vertical-align: top; margin-top: 0.6rem; display: inline-block; color: var(--mid); }
+  .pricing-currency { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; color: var(--mid); margin-top: 0.5rem; }
+  .pricing-includes-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.2rem; color: var(--ink); }
+
+  .pricing-line { display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.8rem; font-size: 0.95rem; color: var(--ink); }
+  .pricing-line::before { content: '—'; color: var(--gold); font-family: 'DM Mono', monospace; flex-shrink: 0; font-size: 0.8rem; margin-top: 0.15rem; }
+
+  .pricing-addons { margin-top: 2rem; padding: 1.5rem 2rem; border: 1px solid rgba(201,168,76,0.3); background: rgba(201,168,76,0.04); }
+  .pricing-addons-title { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+
+  .addon-line { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid rgba(201,168,76,0.15); font-size: 0.9rem; }
+  .addon-line:last-child { border-bottom: none; }
+  .addon-price { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--mid); }
+
+  .pricing-cta {
+    display: block; text-align: center;
+    font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper);
+    padding: 1.1rem 2rem; text-decoration: none; margin-top: 2.5rem;
+    transition: background 0.25s;
+  }
+
+  .pricing-cta:hover { background: var(--gold); color: var(--ink); }
+
+  #who { display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; }
+
+  .who-left { padding: 7rem 5rem; background: var(--accent); color: var(--paper); }
+  .who-left .section-title { color: var(--paper); font-size: 2.8rem; }
+  .who-left .section-label { color: rgba(201,168,76,0.8); }
+
+  .who-list { list-style: none; margin-top: 2rem; }
+  .who-list li { padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; gap: 1rem; align-items: flex-start; font-size: 1rem; color: rgba(245,242,235,0.85); }
+  .who-list li::before { content: '✦'; color: var(--gold); font-size: 0.6rem; margin-top: 0.4rem; flex-shrink: 0; }
+
+  .who-right { padding: 7rem 5rem; background: var(--ink); }
+  .who-right .section-title { color: var(--paper); font-size: 2.8rem; }
+  .who-right .section-label { color: var(--gold); }
+
+  .legal-nav { display: flex; gap: 0; border-bottom: 1px solid rgba(201,168,76,0.3); margin-bottom: 0; }
+
+  .legal-tab {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 1rem 2rem; cursor: pointer; border: none; background: transparent; color: var(--mid);
+    border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.2s, border-color 0.2s;
+  }
+
+  .legal-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .legal-tab:hover { color: var(--ink); }
+
+  .legal-panel { display: none; padding: 3rem 0; }
+  .legal-panel.active { display: block; }
+
+  .legal-panel h2 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin: 2rem 0 0.8rem; color: var(--ink); }
+  .legal-panel h2:first-child { margin-top: 0; }
+  .legal-panel p { font-size: 0.92rem; color: var(--mid); margin-bottom: 0.8rem; line-height: 1.7; }
+
+  #legal { padding: 6rem 5rem; background: var(--smoke); }
+  #legal .section-title { margin-bottom: 2rem; }
+
+  #contact { text-align: center; padding: 8rem 5rem; background: var(--ink); color: var(--paper); position: relative; overflow: hidden; }
+  #contact::before { content: 'MINDANCHOR'; position: absolute; font-family: 'Syne', sans-serif; font-size: 18vw; font-weight: 800; color: rgba(255,255,255,0.02); top: 50%; left: 50%; transform: translate(-50%, -50%); white-space: nowrap; letter-spacing: -0.05em; pointer-events: none; }
+  #contact .section-title { color: var(--paper); max-width: 600px; margin: 0 auto 2rem; }
+  #contact .section-label { color: var(--gold); }
+
+  .contact-email { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--gold-light); text-decoration: none; border-bottom: 1px solid rgba(201,168,76,0.4); padding-bottom: 0.2rem; transition: color 0.2s; }
+  .contact-email:hover { color: var(--paper); }
+
+  footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); padding: 2rem 5rem; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.15em; color: rgba(245,242,235,0.4); }
+  .footer-copy { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: rgba(245,242,235,0.25); }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: rgba(245,242,235,0.3); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold); }
+
+  .gold-rule { width: 3rem; height: 1px; background: var(--gold); margin: 2rem 0; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 8rem 1.5rem 3rem; }
+    .hero-left::after { display: none; }
+    .hero-right { display: none; }
+    .product-grid { grid-template-columns: 1fr; }
+    .product-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .pricing-card { grid-template-columns: 1fr; padding: 2.5rem 2rem; }
+    #who { grid-template-columns: 1fr; }
+    .who-left, .who-right { padding: 5rem 1.5rem; }
+    #legal { padding: 5rem 1.5rem; }
+    #contact { padding: 6rem 1.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">MindAnchor</a>
+  <ul class="nav-links">
+    <li><a href="#product">Product</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#who">Who It's For</a></li>
+    <li><a href="#legal">Terms & Refunds</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#pricing" class="nav-cta">Get Started</a>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-left">
+    <p class="hero-eyebrow">AI Governance & Automation for Regulated Industries</p>
+    <h1 class="hero-title">Workflow<br>intelligence,<br><em>anchored.</em></h1>
+    <p class="hero-sub">MindAnchor delivers a complete AI readiness and automation system — built for insurance, healthcare, and financial services organisations across Australia.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary">View Pricing</a>
+      <a href="#product" class="btn-ghost">See What's Included</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-diagram">
+      <div class="diagram-box diagram-box-gold">
+        <p class="diagram-label">Deliverable 01</p>
+        <p class="diagram-title">AI Workflow Readiness Scorecard</p>
+        <p class="diagram-desc">Audit across 4 dimensions → maturity rating</p>
+      </div>
+      <div class="diagram-connector"></div>
+      <div class="diagram-box diagram-box-ink">
+        <p class="diagram-label">Deliverable 02</p>
+        <p class="diagram-title">Sandbox Demo Builder</p>
+        <p class="diagram-desc">Interactive AI workflow prototype → client-ready</p>
+      </div>
+      <div class="diagram-connector"></div>
+      <div class="diagram-box diagram-box-ink">
+        <p class="diagram-label">Deliverable 03</p>
+        <p class="diagram-title">Power Automate Flow</p>
+        <p class="diagram-desc">Deployed automation → production-ready</p>
+      </div>
+      <div class="diagram-connector"></div>
+      <div class="diagram-box diagram-box-gold">
+        <p class="diagram-label">Deliverable 04</p>
+        <p class="diagram-title">AI Governance Framework</p>
+        <p class="diagram-desc">Risk, oversight & compliance documentation</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="product">
+  <p class="section-label">What You Receive</p>
+  <h2 class="section-title">A complete system.<br><em>Not a consultation.</em></h2>
+  <p style="color:rgba(245,242,235,0.6); max-width:560px; font-size:1rem;">Every engagement produces four concrete, deployment-ready deliverables — not slide decks, not recommendations. Assets your team can use from day one.</p>
+  <div class="product-grid">
+    <div class="product-card">
+      <p class="product-card-num">01 / 04</p>
+      <p class="product-card-title">AI Workflow Readiness Scorecard</p>
+      <p class="product-card-body">A structured audit across Tool Adoption, Workflow Integration, Strategic Clarity, and Human Oversight. Produces a maturity rating with a tailored acceleration pathway specific to your organisation.</p>
+    </div>
+    <div class="product-card">
+      <p class="product-card-num">02 / 04</p>
+      <p class="product-card-title">Interactive Sandbox Demo Builder</p>
+      <p class="product-card-body">A live, interactive prototype demonstrating your proposed AI workflows — built for internal alignment, board presentations, or client-facing demonstrations. No developer required to operate it.</p>
+    </div>
+    <div class="product-card">
+      <p class="product-card-num">03 / 04</p>
+      <p class="product-card-title">Power Automate Flow + Governance Framework</p>
+      <p class="product-card-body">A production-ready automation flow paired with a complete AI governance framework covering risk transfer, human oversight protocols, and regulatory alignment for Australian financial and health services standards.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <p class="section-label">Transparent Pricing</p>
+  <h2 class="section-title">One flat fee.<br><em>Everything included.</em></h2>
+  <p style="color:var(--mid); max-width:520px; font-size:1rem;">No hourly billing. No scope creep. A single, fixed investment for the complete productised bundle.</p>
+  <div class="pricing-container">
+    <div class="pricing-card">
+      <div>
+        <div class="pricing-amount"><span>A$</span>2,950</div>
+        <p class="pricing-currency">Australian Dollars — flat fee, one-time</p>
+        <div class="gold-rule"></div>
+        <p style="font-size:0.92rem; color:var(--mid);">Payment processed securely. Delivery begins within 2 business days of cleared payment.</p>
+      </div>
+      <div>
+        <p class="pricing-includes-title">Bundle includes</p>
+        <div class="pricing-line">AI Workflow Readiness Scorecard & full audit report</div>
+        <div class="pricing-line">Interactive Sandbox Demo Builder (HTML, client-ready)</div>
+        <div class="pricing-line">Power Automate workflow — configured & deployed</div>
+        <div class="pricing-line">AI Governance Framework document</div>
+        <div class="pricing-line">Transfer of Risk summary for stakeholder sign-off</div>
+        <div class="pricing-line">30-day email Q&A support post-delivery</div>
+      </div>
+    </div>
+    <div class="pricing-addons">
+      <p class="pricing-addons-title">Optional Add-Ons</p>
+      <div class="addon-line"><span>Extended support (90-day)</span><span class="addon-price">A$750</span></div>
+      <div class="addon-line"><span>Additional Power Automate flow (per flow)</span><span class="addon-price">A$650</span></div>
+      <div class="addon-line"><span>Staff AI training session (half-day, remote)</span><span class="addon-price">A$950</span></div>
+    </div>
+    <a href="#contact" class="pricing-cta">Enquire to Get Started →</a>
+  </div>
+</section>
+
+<section id="who">
+  <div class="who-left">
+    <p class="section-label">Industries Served</p>
+    <h2 class="section-title">Built for <em>regulated</em> environments.</h2>
+    <ul class="who-list">
+      <li>Insurance carriers, brokers & underwriters navigating claims automation and AI-assisted underwriting</li>
+      <li>Healthcare providers & aged care operators implementing patient workflow automation under NDIS and clinical governance requirements</li>
+      <li>Financial services firms, accounting practices & credit providers subject to ASIC, APRA or AFCA oversight</li>
+      <li>Operations and compliance teams who need AI to work within — not around — their risk frameworks</li>
+    </ul>
+  </div>
+  <div class="who-right">
+    <p class="section-label">What Makes This Different</p>
+    <h2 class="section-title" style="color:var(--paper);">Governance <em>first.</em></h2>
+    <div class="who-list">
+      <li style="color:rgba(245,242,235,0.75);">Every deliverable is designed with regulatory risk transfer in mind — not bolted on afterward</li>
+      <li style="color:rgba(245,242,235,0.75);">Fixed scope means no billing surprises mid-engagement</li>
+      <li style="color:rgba(245,242,235,0.75);">Outputs are immediately deployable — not recommendations requiring further investment to action</li>
+      <li style="color:rgba(245,242,235,0.75);">Designed for Australian regulatory context from the ground up</li>
+    </div>
+  </div>
+</section>
+
+<section id="legal">
+  <p class="section-label">Legal</p>
+  <h2 class="section-title">Terms & <em>Policies</em></h2>
+  <div class="legal-nav">
+    <button class="legal-tab active" onclick="showTab('tos')">Terms of Service</button>
+    <button class="legal-tab" onclick="showTab('refund')">Refund Policy</button>
+  </div>
+  <div id="tos" class="legal-panel active">
+    <h2>1. Agreement</h2>
+    <p>By purchasing the MindAnchor Full Productised Bundle ("the Product"), you ("the Client") agree to these Terms of Service. MindAnchor ("we", "us") is a business operating in Australia. These terms govern the purchase, delivery, and use of all deliverables.</p>
+    <h2>2. Scope of Delivery</h2>
+    <p>The Product includes the four deliverables described on this website: the AI Workflow Readiness Scorecard, Interactive Sandbox Demo Builder, Power Automate Flow, and AI Governance Framework. Delivery is completed remotely. Delivery commences within 2 business days of cleared payment and is completed within an agreed timeframe — typically 10–15 business days.</p>
+    <h2>3. Payment</h2>
+    <p>The flat fee of A$2,950 is payable in full prior to commencement of work. Payment is processed via Lemon Squeezy. Add-on services are invoiced separately and subject to separate agreement.</p>
+    <h2>4. Intellectual Property</h2>
+    <p>Upon full payment, the Client receives a non-exclusive, perpetual licence to use all deliverables within their organisation. MindAnchor retains the right to use anonymised methodologies, frameworks, and structures for future client work. The Client may not resell or sublicence deliverables to third parties.</p>
+    <h2>5. Client Responsibilities</h2>
+    <p>The Client is responsible for providing accurate information during the scoping and audit process. MindAnchor is not liable for outcomes resulting from inaccurate or incomplete information provided by the Client. The Client is responsible for their own regulatory and legal compliance when implementing AI workflows.</p>
+    <h2>6. Limitation of Liability</h2>
+    <p>MindAnchor's total liability to the Client under any circumstances is limited to the amount paid for the Product. We are not liable for indirect, consequential, or incidental losses arising from use of the deliverables. The AI Governance Framework is provided as a best-practice document and does not constitute legal or compliance advice.</p>
+    <h2>7. Governing Law</h2>
+    <p>These Terms are governed by the laws of New South Wales, Australia. Any disputes are subject to the exclusive jurisdiction of NSW courts.</p>
+    <h2>8. Contact</h2>
+    <p>For questions about these Terms, contact us via the details on this website.</p>
+  </div>
+  <div id="refund" class="legal-panel">
+    <h2>Our Commitment</h2>
+    <p>MindAnchor stands behind the quality of every deliverable. We are committed to delivering work that meets the agreed scope and quality standard.</p>
+    <h2>Eligibility for Refund</h2>
+    <p>A full refund is available if you notify us within 5 business days of the commencement date that you wish to cancel, provided that work has not yet commenced in earnest. If preliminary scoping or audit work has begun, a partial refund reflecting work completed will be offered at our discretion.</p>
+    <p>Once final deliverables have been submitted to the Client, refunds are not available except in the case of a material failure to deliver the agreed scope.</p>
+    <h2>What Constitutes a Material Failure</h2>
+    <p>A material failure means we did not deliver one or more of the four agreed deliverables, or delivered something demonstrably inconsistent with the agreed scope. In this case, we will first offer to remedy the issue. If a remedy is not possible within 10 business days, a pro-rata refund will be issued.</p>
+    <h2>Non-Refundable Circumstances</h2>
+    <p>Refunds are not available where: the Client has provided inaccurate or incomplete information; the Client has changed requirements after work commenced; the Client is dissatisfied with AI implementation outcomes outside MindAnchor's control; or where more than 30 days have passed since delivery.</p>
+    <h2>Add-Ons</h2>
+    <p>Add-on services are non-refundable once delivered or commenced.</p>
+    <h2>Process</h2>
+    <p>To request a refund, contact us at the email listed on this website with your order details and reason. We will respond within 3 business days.</p>
+  </div>
+</section>
+
+<section id="contact">
+  <p class="section-label">Get In Touch</p>
+  <h2 class="section-title">Ready to anchor your<br><em>AI strategy?</em></h2>
+  <p style="color:rgba(245,242,235,0.5); margin-bottom:2rem; font-size:1rem;">Reach out to discuss your organisation's needs before purchasing.</p>
+  <a href="mailto:hello@mindanchor.com.au" class="contact-email">hello@mindanchor.com.au</a>
+</section>
+
+<footer>
+  <span class="footer-logo">MindAnchor</span>
+  <div class="footer-links">
+    <a href="#legal" onclick="showTab('tos')">Terms of Service</a>
+    <a href="#legal" onclick="showTab('refund')">Refund Policy</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <span class="footer-copy">© 2026 MindAnchor. All rights reserved. ABN pending.</span>
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.legal-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.legal-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const idx = id === 'tos' ? 0 : 1;
+    document.querySelectorAll('.legal-tab')[idx].classList.add('active');
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.product-card, .pricing-card, .pricing-addons, .diagram-box').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
