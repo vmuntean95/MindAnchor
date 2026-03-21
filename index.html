@@ -527,45 +527,80 @@
 </section>
 
 <section id="legal">
-  <p class="section-label">Legal</p>
-  <h2 class="section-title">Terms & <em>Policies</em></h2>
-  <div class="legal-nav">
-    <button class="legal-tab active" onclick="showTab('tos')">Terms of Service</button>
-    <button class="legal-tab" onclick="showTab('refund')">Refund Policy</button>
+
+  <div class="section-label">Legal</div>
+  <h2>Terms &amp; <em>Policies</em></h2>
+
+  <div class="legal-tabs">
+    <button class="tab-btn active" onclick="showTab('tos')">Terms of Service</button>
+    <button class="tab-btn" onclick="showTab('refund')">Refund Policy</button>
   </div>
-  <div id="tos" class="legal-panel active">
+
+  <!-- TERMS OF SERVICE -->
+  <div id="tos" class="tab-content active">
+
     <h2>1. Agreement</h2>
-    <p>By purchasing the MindAnchor Full Productised Bundle ("the Product"), you ("the Client") agree to these Terms of Service. MindAnchor ("we", "us") is a business operating in Australia. These terms govern the purchase, delivery, and use of all deliverables.</p>
+    <p>By purchasing the MindAnchor-AI Full Productised Bundle ("the Product"), you ("the Client") agree to these Terms of Service. MindAnchor-AI ("we", "us") is a business operating in Australia. All fees quoted are in Australian Dollars (AUD). These terms govern the purchase, delivery, and use of all deliverables.</p>
+
     <h2>2. Scope of Delivery</h2>
     <p>The Product includes the four deliverables described on this website: the AI Workflow Readiness Scorecard, Interactive Sandbox Demo Builder, Power Automate Flow, and AI Governance Framework. Delivery is completed remotely. Delivery commences within 2 business days of cleared payment and is completed within an agreed timeframe — typically 10–15 business days.</p>
+
     <h2>3. Payment</h2>
-    <p>The flat fee of A$2,950 is payable in full prior to commencement of work. Payment is processed via Lemon Squeezy. Add-on services are invoiced separately and subject to separate agreement.</p>
-    <h2>4. Intellectual Property</h2>
-    <p>Upon full payment, the Client receives a non-exclusive, perpetual licence to use all deliverables within their organisation. MindAnchor retains the right to use anonymised methodologies, frameworks, and structures for future client work. The Client may not resell or sublicence deliverables to third parties.</p>
-    <h2>5. Client Responsibilities</h2>
-    <p>The Client is responsible for providing accurate information during the scoping and audit process. MindAnchor is not liable for outcomes resulting from inaccurate or incomplete information provided by the Client. The Client is responsible for their own regulatory and legal compliance when implementing AI workflows.</p>
-    <h2>6. Limitation of Liability</h2>
-    <p>MindAnchor's total liability to the Client under any circumstances is limited to the amount paid for the Product. We are not liable for indirect, consequential, or incidental losses arising from use of the deliverables. The AI Governance Framework is provided as a best-practice document and does not constitute legal or compliance advice.</p>
-    <h2>7. Governing Law</h2>
-    <p>These Terms are governed by the laws of New South Wales, Australia. Any disputes are subject to the exclusive jurisdiction of NSW courts.</p>
-    <h2>8. Contact</h2>
-    <p>For questions about these Terms, contact us via the details on this website.</p>
+    <p>The flat fee of A$2,950 (AUD) is payable in full prior to commencement of work. Payment is processed via Lemon Squeezy. Add-on services are invoiced separately and subject to separate agreement. All amounts are stated and payable in Australian Dollars.</p>
+
+    <h2>4. Australian Consumer Law Guarantees</h2>
+    <p>Our services come with guarantees that cannot be excluded under the Australian Consumer Law (ACL). Nothing in these Terms limits, excludes, or modifies any rights you have under the ACL.</p>
+    <ul>
+      <li><strong>Due Care &amp; Skill:</strong> We guarantee that all consulting and automation services are provided with the technical knowledge and care expected of a specialist in Australian regulated industries.</li>
+      <li><strong>Fit for Purpose:</strong> We guarantee that our deliverables will meet the specific purposes agreed upon in your Statement of Work and described on this website.</li>
+    </ul>
+
+    <h2>5. Intellectual Property</h2>
+    <p>Upon full payment, the Client receives a non-exclusive, perpetual licence to use all deliverables within their organisation. MindAnchor-AI retains the right to use anonymised methodologies, frameworks, and structures for future client work. The Client may not resell or sublicence deliverables to third parties.</p>
+
+    <h2>6. Client Responsibilities</h2>
+    <p>The Client is responsible for providing accurate and complete information during the scoping and audit process. MindAnchor-AI is not liable for outcomes resulting from inaccurate or incomplete information provided by the Client. The Client is responsible for their own regulatory and legal compliance when implementing AI workflows. Liability does not attach to MindAnchor-AI where a failure is caused by inaccurate or incomplete data provided by the Client, Client interference or refusal to follow technical advice, or changes made to automated flows by Client staff after deployment.</p>
+
+    <h2>7. Human-in-the-Loop Requirement</h2>
+    <p>MindAnchor-AI's outputs — including AI Governance Frameworks, Readiness Scorecards, and automated workflow configurations — are diagnostic and advisory in nature. They do not constitute legal, compliance, or financial advice. Final verification and go-live approval for any AI-assisted workflow or governance document are the sole responsibility of the Client's internal legal, compliance, and technical teams. MindAnchor-AI is not liable for any actions taken based on unverified or unreviewed AI outputs.</p>
+
+    <h2>8. Limitation of Liability</h2>
+    <p>To the maximum extent permitted by law, MindAnchor-AI's total aggregate liability to the Client under any circumstances — whether in contract, tort, or negligence — is limited to 100% of the total fees paid by the Client for the relevant engagement. MindAnchor-AI is not liable for any indirect, incidental, or consequential losses, including but not limited to loss of profit, loss of data, business interruption, or regulatory fines incurred by the Client's organisation.</p>
+
+    <h2>9. Governing Law</h2>
+    <p>These Terms are governed by the laws of Queensland, Australia. Any disputes are subject to the exclusive jurisdiction of Queensland courts.</p>
+
+    <h2>10. Contact</h2>
+    <p>For questions about these Terms, contact us at <a href="mailto:hello@mindanchor.com.au">hello@mindanchor.com.au</a>.</p>
+
   </div>
-  <div id="refund" class="legal-panel">
+
+  <!-- REFUND POLICY -->
+  <div id="refund" class="tab-content">
+
     <h2>Our Commitment</h2>
-    <p>MindAnchor stands behind the quality of every deliverable. We are committed to delivering work that meets the agreed scope and quality standard.</p>
+    <p>MindAnchor-AI stands behind the quality of every deliverable. We are committed to delivering work that meets the agreed scope and professional standard. Your rights under the Australian Consumer Law apply in addition to, and are not limited by, the terms below.</p>
+
+    <h2>Major Failure</h2>
+    <p>If a service has a major failure — meaning it is fundamentally unfit for the agreed purpose and cannot be remedied — you are entitled to cancel the service contract and receive a refund for the unused portion of fees paid, or keep the contract at a reduced price reflecting the diminished value.</p>
+
+    <h2>Minor Failure</h2>
+    <p>If a failure is minor — such as a technical error in a flow or a documentation inconsistency — MindAnchor-AI reserves the right to remedy the issue at no cost within a reasonable timeframe. Refunds will not be issued for minor failures that can and will be rectified.</p>
+
     <h2>Eligibility for Refund</h2>
-    <p>A full refund is available if you notify us within 5 business days of the commencement date that you wish to cancel, provided that work has not yet commenced in earnest. If preliminary scoping or audit work has begun, a partial refund reflecting work completed will be offered at our discretion.</p>
-    <p>Once final deliverables have been submitted to the Client, refunds are not available except in the case of a material failure to deliver the agreed scope.</p>
-    <h2>What Constitutes a Material Failure</h2>
-    <p>A material failure means we did not deliver one or more of the four agreed deliverables, or delivered something demonstrably inconsistent with the agreed scope. In this case, we will first offer to remedy the issue. If a remedy is not possible within 10 business days, a pro-rata refund will be issued.</p>
+    <p>A full refund is available if you notify us within 5 business days of the commencement date that you wish to cancel, provided that work has not yet commenced in earnest. If preliminary scoping or audit work has begun, a partial refund reflecting work completed will be offered at our discretion. Once final deliverables have been submitted to the Client, refunds are not available except where a material failure to deliver the agreed scope has occurred.</p>
+
     <h2>Non-Refundable Circumstances</h2>
-    <p>Refunds are not available where: the Client has provided inaccurate or incomplete information; the Client has changed requirements after work commenced; the Client is dissatisfied with AI implementation outcomes outside MindAnchor's control; or where more than 30 days have passed since delivery.</p>
+    <p>Refunds are not available where: the Client has provided inaccurate or incomplete information; the Client has changed requirements after work commenced; the Client simply changes their mind or business direction after work has commenced; the Client is dissatisfied with AI implementation outcomes outside MindAnchor-AI's control; or where more than 30 days have passed since delivery.</p>
+
     <h2>Add-Ons</h2>
     <p>Add-on services are non-refundable once delivered or commenced.</p>
+
     <h2>Process</h2>
-    <p>To request a refund, contact us at the email listed on this website with your order details and reason. We will respond within 3 business days.</p>
+    <p>To request a refund, contact us at <a href="mailto:hello@mindanchor.com.au">hello@mindanchor.com.au</a> with your order details and reason. We will respond within 3 business days.</p>
+
   </div>
+
 </section>
 
 <section id="contact">
