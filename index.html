@@ -494,7 +494,7 @@
 <!-- DEADLINE BANNER -->
 <!-- ⚠️ REPLACE href BELOW WITH YOUR CALENDLY LINK WHEN SET UP -->
 <div class="deadline-banner">
-  <span>⚠️ <strong>10 December 2026:</strong> Mandatory AI transparency obligations take effect in Australia. 6 months to build your governance position.</span>
+  <span>⚠️ <strong>10 December 2026:</strong> Mandatory AI transparency obligations take effect in Australia. <span class="ma-countdown"></span> to build your governance position.</span>
   <a href="https://form.typeform.com/to/VcfW0gAS">Run your free diagnostic →</a>
 </div>
 
@@ -517,7 +517,7 @@
   <p class="hero-eyebrow">AI Governance for Regulated Australian SMEs</p>
   <h1>Your AI is being used.<br><em>Your governance isn't.</em></h1>
   <p class="hero-sub">
-    <strong>APRA CPS 230 is in effect.</strong> ASIC is scrutinising AI-influenced decisions. The December 2026 automated decision-making transparency deadline is 6 months away.<br><br>
+    <strong>The 10 December 2026 automated decision-making transparency deadline is <span class="ma-countdown"></span> away.</strong> ASIC is scrutinising AI-influenced decisions. APRA CPS 230 is in effect for APRA-regulated entities.<br><br>
     MindAnchor-AI Consulting builds the governance frameworks, oversight protocols, and audit trails that regulated Australian SMEs need — in operations language, not tech language.
   </p>
   <div class="btn-row">
@@ -545,7 +545,7 @@
   <div class="del-item">
     <p class="del-num">Step 02 — A$397</p>
     <p class="del-title">Governance Starter Pack</p>
-    <p class="del-sub">Framework, policies & templates — delivered automatically</p>
+    <p class="del-sub">Framework, policies & templates — delivered within 1 business day</p>
   </div>
   <div class="del-item">
     <p class="del-num">Step 03 — From A$2,500</p>
@@ -555,7 +555,7 @@
   <div class="del-item">
     <p class="del-num">Deadline</p>
     <p class="del-title">10 December 2026</p>
-    <p class="del-sub">ADM transparency obligations take effect — 6 months to prepare</p>
+    <p class="del-sub">ADM transparency obligations take effect — <span class="ma-countdown"></span> to prepare</p>
   </div>
 </div>
 
@@ -636,7 +636,7 @@
       </div>
       <div class="gov-point">
         <h4>December 2026 ADM Deadline</h4>
-        <p>Mandatory automated decision-making transparency obligations take effect 10 December 2026 under the Privacy and Other Legislation Amendment Act 2024. 6 months. The firms building now won't be scrambling then.</p>
+        <p>Mandatory automated decision-making transparency obligations take effect 10 December 2026 under the Privacy and Other Legislation Amendment Act 2024. <span class="ma-countdown"></span>. The firms building now won't be scrambling then.</p>
       </div>
       <div class="gov-point">
         <h4>AFCA Is Already Asking</h4>
@@ -687,7 +687,8 @@
           <li>Shadow AI Discovery Survey template</li>
           <li>Priority compliance action checklist</li>
         </ul>
-        <a href="mailto:vicentiu@mindanchorai.com.au?subject=Governance Starter Pack — [Your Company]" class="btn-book">Get Starter Pack</a>
+        <!-- TODO: replace with Stripe Payment Link -->
+        <a href="mailto:vicentiu@mindanchorai.com.au?subject=Governance Starter Pack — [Your Company]" class="btn-book">Order Starter Pack</a>
         <p class="enquire-note">Most common starting point for regulated firms.</p>
       </div>
 
@@ -854,6 +855,27 @@ function showTab(id) {
   document.getElementById(id).classList.add('active');
   event.target.classList.add('active');
 }
+
+// Whole calendar months remaining until the ADM transparency deadline
+// (December 2026). Evaluated in Australian time so the figure does not shift
+// with the visitor's timezone.
+(function () {
+  var deadline = new Date('2026-12-10T00:00:00+10:00');
+  var text;
+
+  if (new Date() >= deadline) {
+    text = 'now in effect';
+  } else {
+    var aest = new Date(Date.now() + 10 * 3600000);
+    var months = (2026 - aest.getUTCFullYear()) * 12 + (11 - aest.getUTCMonth());
+    if (months < 1) months = 1;
+    text = months === 1 ? '1 month' : months + ' months';
+  }
+
+  document.querySelectorAll('.ma-countdown').forEach(function (el) {
+    el.textContent = text;
+  });
+})();
 </script>
 </body>
 </html>
